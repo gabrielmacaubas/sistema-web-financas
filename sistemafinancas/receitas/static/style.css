@@ -1,0 +1,51 @@
+body{
+    font-family: 'Montserrat'
+}
+
+header {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background-color: #3776ab; 
+    color: white; 
+    padding: 10px; 
+    margin: 20px 15%;
+    justify-content: space-between;
+}
+
+
+a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    margin: 5px;
+}
+
+table {
+    text-align: center;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 850px;
+    padding: 10px; 
+    margin: 20px 15%;
+}
+
+form {
+    justify-content: left; 
+    flex-direction: column;
+    padding: 10px; 
+    margin: 20px 15%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #8dc6ff;
+    color: black;
+    font-weight: bold;
+}
+

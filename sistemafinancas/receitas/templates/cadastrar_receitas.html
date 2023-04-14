@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+   {% load static %}
+   <link rel="stylesheet" href="{% static '/style.css' %}">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+</head>
+<body>
+   <header>
+      <h1>Sistema Finanças</h1>
+      <a href="{% url 'home' %}">home</a>
+   </header>
+   
+   <div class="container">
+      <form action="." method="post">
+         <h1>Cadastrar Receitas</h1>
+         {% csrf_token %}
+         {{ form.as_p }}
+         <input type="submit" value="Cadastrar">
+      </form>
+
+      <table>
+         <tr>
+            {% for head in header %}
+            <th>{{ head }}</th>
+            {% endfor %}
+         </tr>
+         {% for receita in receitas %}
+         
+         <tr>
+            <td>{{ receita.valor }}</td>
+            <td>{{ receita.data }}</td>
+            <td>{{ receita.descricao }}</td>
+            <td>{{ receita.categoria }}</td>
+            <td>{{ receita.comprovante }}</td>
+         </tr>
+         {% endfor %}
+         
+      </table>
+   </div>
+
+</body>
+</html>
