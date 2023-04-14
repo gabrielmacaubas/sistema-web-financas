@@ -1,5 +1,5 @@
 body{
-    font-family: 'Montserrat'
+    font-family: 'Montserrat';
 }
 
 header {
@@ -35,6 +35,7 @@ form {
     flex-direction: column;
     padding: 10px; 
     margin: 20px 15%;
+    width: 100%;
 }
 
 th, td {
@@ -49,3 +50,10 @@ th {
     font-weight: bold;
 }
 
+.container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    width: 100%;
+
+}

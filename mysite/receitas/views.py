@@ -1,12 +1,14 @@
 from django.http import HttpResponse
 from django.template import loader
 from .models import Receita
-from .forms import ReceitaForm
+from .forms import ReceitaForm, FiltroForm
 import csv
 import datetime
 
 
 def receitas_view(request):
+    receitas = []
+
     if request.method == 'POST':
         form = ReceitaForm(request.POST)
 
@@ -19,14 +21,25 @@ def receitas_view(request):
         )
 
         salvar_receita(receita)
-    
+
+    else:
+        filtro_form = FiltroForm(request.GET)
+        receitas = carregar_receitas()
+
+        if len(filtro_form.data) != 0:
+            if filtro_form.data['min'] != '' or filtro_form.data['max'] != '':
+                min = filtro_form.data['min']
+                max = filtro_form.data['max']
+
+                receitas = filtrar_valor(min, max, receitas)
+
     template = loader.get_template('cadastrar_receitas.html')
     context = {
         'form': ReceitaForm(),
+        'filtroForm': FiltroForm(),
         'header': ['Valor', 'Data', 'Descrição', 'Categoria', 'Comprovante'],
-        'receitas': carregar_receitas()
+        'receitas': receitas
     }
-
 
     return HttpResponse(template.render(context, request))
 
@@ -47,20 +60,18 @@ def salvar_receita(receita: Receita):
     f.close()
 
 
-def carregar_receitas(filtro=None):
-    if (filtro == None):
+def carregar_receitas():
+    f = open('./receitas.csv', 'r')
+    reader = csv.DictReader(f)
+    receitas = []
 
-        f = open('./receitas.csv', 'r')
-        reader = csv.DictReader(f)
-        receitas = []
+    for row in reader:
+        receitas.append(row)
 
-        for row in reader:
-            receitas.append(row)
+    f.close()
 
-        f.close()
-
-        
-        return reversed(merge_sort(receitas))
+    
+    return reversed(merge_sort(receitas))
 
 
 def merge_sort(receitas):
@@ -98,3 +109,29 @@ def merge_sort(receitas):
             j += 1
             k += 1
     return receitas
+
+
+def filtrar_valor(min, max, receitas):  
+    if min == '':
+        min = 0
+    
+    receitas_novo = []
+    min = int(min)
+
+    if max == '':
+        for receita in receitas:
+            if int(receita["valor"]) >= min:
+                receitas_novo.append(receita)
+
+        return receitas_novo
+
+    else:
+        max = int(max)
+
+        for receita in receitas:
+            if int(receita["valor"]) >= min and int(receita["valor"]) <= max:
+                receitas_novo.append(receita)
+
+        return receitas_novo
+         
+    
