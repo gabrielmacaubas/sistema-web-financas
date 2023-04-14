@@ -45,13 +45,16 @@ def salvar_receita(receita: Receita):
     f.close()
 
 
-def carregar_receitas():
-    f = open('./receitas.csv', 'r')
-    reader = csv.DictReader(f)
-    receitas = []
+def carregar_receitas(filtro=None):
+    if (filtro == None):
 
-    for row in reader:
-        receitas.append(row)
+        f = open('./receitas.csv', 'r')
+        reader = csv.DictReader(f)
+        receitas = []
 
-    f.close()
-    return receitas
+        for row in reader:
+            receitas.append(row)
+
+        f.close()
+        return receitas
+

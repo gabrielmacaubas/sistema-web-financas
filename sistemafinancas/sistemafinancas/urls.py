@@ -20,7 +20,7 @@ from receitas.views import receitas_view
 from home.views import home_view
 
 urlpatterns = [
-    path('home/', home_view, name="home"),
+    path('', home_view, name="home"),
     path('receitas/', receitas_view, name="receitas"),
     path('admin/', admin.site.urls),
 ]
