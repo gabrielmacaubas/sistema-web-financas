@@ -4,7 +4,7 @@ from .models import Receita
 from .forms import ReceitaForm, FiltroForm
 import csv
 import datetime
-
+import pandas as pd
 
 def receitas_view(request):
     receitas = []
@@ -20,11 +20,12 @@ def receitas_view(request):
             comprovante=form.data['comprovante']
         )
 
-        salvar_receita(receita)
+        criar_receita(receita)
+        receitas = ler_receitas()
 
     else:
         filtro_form = FiltroForm(request.GET)
-        receitas = carregar_receitas()
+        receitas = ler_receitas()
 
         if len(filtro_form.data) != 0:
             if filtro_form.data['min'] != '' or filtro_form.data['max'] != '':
@@ -32,6 +33,7 @@ def receitas_view(request):
                 max = filtro_form.data['max']
 
                 receitas = filtrar_valor(min, max, receitas)
+
 
     template = loader.get_template('cadastrar_receitas.html')
     context = {
@@ -44,23 +46,25 @@ def receitas_view(request):
     return HttpResponse(template.render(context, request))
 
 
-def salvar_receita(receita: Receita):
+def criar_receita(receita: Receita):
+    file = pd.read_csv('./receitas.csv', encoding='UTF-8', sep=',', usecols=["id"])
+    id = file.iloc[-1][0] + 1
     dados = [
+        id,
         receita.valor,
         receita.data,
         receita.descricao,
         receita.categoria,
         receita.comprovante
     ]
-
-    f = open('./receitas.csv', 'a')
-    writer = csv.writer(f)
+    file = open('./receitas.csv', 'a')
+    writer = csv.writer(file)
 
     writer.writerow(dados)
-    f.close()
+    file.close()
+    
 
-
-def carregar_receitas():
+def ler_receitas():
     f = open('./receitas.csv', 'r')
     reader = csv.DictReader(f)
     receitas = []
@@ -70,7 +74,6 @@ def carregar_receitas():
 
     f.close()
 
-    
     return reversed(merge_sort(receitas))
 
 
@@ -86,7 +89,7 @@ def merge_sort(receitas):
         i = j = k = 0
  
         while i < len(L) and j < len(R):
-            dataA = L[i]["data"]
+            dataA = L[i]["data"]  
             dataB = R[j]["data"]
             dataA = datetime.datetime(int(dataA[0:4]), int(dataA[5:7]), int(dataA[8:10]))
             dataB = datetime.datetime(int(dataB[0:4]), int(dataB[5:7]), int(dataB[8:10]))
