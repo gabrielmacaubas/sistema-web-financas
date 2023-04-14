@@ -25,10 +25,11 @@
             <th>{{ head }}</th>
             {% endfor %}
          </tr>
+         {% load humanize %}
+
          {% for receita in receitas %}
-         
          <tr>
-            <td>{{ receita.valor }}</td>
+            <td style="color:green">+ R$ {{ receita.valor|intcomma }}</td>
             <td>{{ receita.data }}</td>
             <td>{{ receita.descricao }}</td>
             <td>{{ receita.categoria }}</td>
