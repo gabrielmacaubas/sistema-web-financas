@@ -9,4 +9,3 @@ class Receita(models.Model):
     categoria = models.CharField(max_length=12)
     comprovante = models.FileField()
 
-#class Despesa()
