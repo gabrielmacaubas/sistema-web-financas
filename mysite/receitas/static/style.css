@@ -58,7 +58,7 @@ th {
 }
 
 .alterar, .remover {
-    color: blue;
+    color: #3776ab;
     font-size: 15px;
     cursor: pointer;
 }
