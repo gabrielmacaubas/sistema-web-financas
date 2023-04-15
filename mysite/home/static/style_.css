@@ -20,11 +20,16 @@ header {
 }
 
 button {
-    padding: 12px 24px;
-    margin: 0 10px;
-    font-size: 20px;
-
-    background-color: #8dc6ff; /* set background color to a green shade */
-    color: white; /* set font color to white */
+    background-color: #8dc6ff;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 25px;
     cursor: pointer;
-  }
+    border-radius: 4px;
+    font-size: 35px;
+}

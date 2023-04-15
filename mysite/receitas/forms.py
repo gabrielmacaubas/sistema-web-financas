@@ -15,8 +15,20 @@ class ReceitaForm(forms.ModelForm):
 
 
 class FiltroForm(forms.Form):
-    min = forms.DecimalField(max_digits=10, decimal_places=2, help_text='R$', required=False)
-    max = forms.DecimalField(max_digits=10, decimal_places=2, help_text='R$', required=False)
+    min = forms.DecimalField(
+        max_digits=10,
+        decimal_places=2, 
+        help_text='R$', 
+        required=False, 
+        widget=forms.TextInput(attrs={'placeholder': '0,00'}
+    ))
+    max = forms.DecimalField(
+        max_digits=10, 
+        decimal_places=2, 
+        help_text='R$', 
+        required=False, 
+        widget=forms.TextInput(attrs={'placeholder': '0,00'}
+    ))
     #data
     #categoria
 
