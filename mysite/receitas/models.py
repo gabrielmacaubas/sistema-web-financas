@@ -6,4 +6,4 @@ class Receita(models.Model):
     data = models.CharField(max_length=10)
     descricao = models.CharField(max_length=100, null=True, blank=True)
     categoria = models.CharField(max_length=12)
-    comprovante = models.FileField()
+    comprovante = models.FileField(null=False)

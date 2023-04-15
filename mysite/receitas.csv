@@ -6,11 +6,11 @@ id,valor,data,descricao,categoria,comprovante
 5,2,2023-04-15,lorem,Outros,Screenshot_4.png
 6,132,2023-04-07,lorem,Investimento,Screenshot_11.png
 7,12,2023-04-29,lorem,Presente,Screenshot_5.png
-8,333,2023-04-27,lorem,Prêmio,Screenshot_7.png
-9,443,2023-04-26,loremm,Salárioo,Screenshot_8.png
+8,333,2023-04-27,lorem,Prêmio,
+9,443,2023-04-26,loremm,Salárioo,
 10,123,2023-04-15,lorem,Outros,Screenshot_3.png
 11,62,2023-04-19,lorem,Investimento,Screenshot_1.png
-12,62,2023-04-18,lorem,Presente,Screenshot_1.png
+12,62,2023-04-18,lorem,Presente,
 13,62,2023-04-02,lorem,Prêmio,Screenshot_1.png
 15,12321,2023-04-04,aaa,awd,Screenshot_9.png
 16,12321,2023-04-04,aaa,awd,Screenshot_9.png

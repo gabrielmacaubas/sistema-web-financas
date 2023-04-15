@@ -81,9 +81,11 @@ def ler_receitas():
 
 
 def alterar(request, id):
+    receita_antigo = buscar_receita(id)
     template = loader.get_template('alterar_receita.html')
+
     context = {
-        'form': ReceitaForm(),
+        'form': ReceitaForm(initial=receita_antigo),
         'id': id
     }
 
@@ -184,4 +186,12 @@ def filtrar_valor(min, max, receitas):
 
         return receitas_novo
          
-    
+
+def buscar_receita(id):
+    receitas = ler_receitas()
+
+    for receita in receitas:
+        if int(receita['id']) == id:
+            return receita
+
+    return None
