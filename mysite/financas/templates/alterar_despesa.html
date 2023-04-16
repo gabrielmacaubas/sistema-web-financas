@@ -17,11 +17,11 @@
       </div>
    </nav>
    <div class="container">
-      <form action="{% url 'alterar' 'r' id %}" method="post">
-         <h1>Alterar Receita</h1>
+      <form action="{% url 'alterar' 'd' id %}" method="post">
+         <h1>Alterar Despesa</h1>
          {% csrf_token %}
          {{ form.as_p }}
-         <a href="{% url 'receitas' %}">
+         <a href="{% url 'despesas' %}">
             <input type="button" id="voltar" value="Voltar" style="background-color:gray">
          </a>
          <input type="submit" value="Alterar">

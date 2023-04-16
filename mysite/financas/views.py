@@ -3,16 +3,15 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import redirect
 from .models import Receita
-from .forms import ReceitaForm, FiltroForm
+from .forms import *
 from .utils import *
 
 
 def receitas_view(request):
     receitas = Receita.objects.all().order_by('data').reverse()
-    filtro_form = FiltroForm(request.GET)
+    filtro_form = request.GET.dict()
 
-    if len(filtro_form.data) != 0:
-        filtro_form = filtro_form.data
+    if len(filtro_form) != 0:
         if filtro_form['min'] != '' or filtro_form['max'] != '':
             min = filtro_form['min']
             max = filtro_form['max']    
@@ -26,34 +25,81 @@ def receitas_view(request):
             data = filtro_form['data']
             receitas = filtrar_data(data, receitas)
         
-        filtro_form = filtro_form.dict()
-
         filtro_form.pop('csrfmiddlewaretoken')
+        filtro_form = FiltroReceitaForm(initial=filtro_form)
 
-        filtro_form = FiltroForm(initial=filtro_form)
-
+    else:
+        filtro_form = FiltroReceitaForm()
 
     template = loader.get_template('cadastrar_receitas.html')
     context = {
         'form': ReceitaForm(),
         'filtroForm': filtro_form,
         'header': ['Valor', 'Data', 'Descrição', 'Categoria', 'Comprovante'],
-        'receitas': receitas
+        'receitas': receitas,
+        'type': 'r'
     }
 
     return HttpResponse(template.render(context, request))
 
 
-def criar_receita(request):
-    form_data = ReceitaForm(request.POST).data
+def despesas_view(request):
+    despesas = Despesa.objects.all().order_by('data').reverse()
+    filtro_form = request.GET.dict()
+
+    if len(filtro_form) != 0:
+        if filtro_form['min'] != '' or filtro_form['max'] != '':
+            min = filtro_form['min']
+            max = filtro_form['max']    
+            despesas = filtrar_valor(min, max, despesas)
+
+        if filtro_form['categoria'] != '':
+            categoria = filtro_form['categoria']
+            despesas = filtrar_categoria(categoria, despesas)
+        
+        if filtro_form['data'] != '':
+            data = filtro_form['data']
+            despesas = filtrar_data(data, despesas)
+        
+        filtro_form.pop('csrfmiddlewaretoken')
+        filtro_form = FiltroDespesaForm(initial=filtro_form)
+
+    else:
+        filtro_form = FiltroDespesaForm()
+
+    filtro_form = FiltroDespesaForm()
+    template = loader.get_template('cadastrar_despesas.html')
+    context = {
+        'form': DespesaForm(),
+        'filtroForm': filtro_form,
+        'header': ['Valor', 'Data', 'Descrição', 'Categoria', 'Comprovante'],
+        'despesas': despesas,
+        'type': 'd'
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
+def criar(request, type):
+    form_data = request.POST
     valido = duplicidade_validation(
         form_data['valor'], 
-        form_data['data'], 
-        form_data['categoria']
+        form_data['data'],
+        form_data['categoria'],
+        type
         )
     
+    if type == 'r':
+        objeto = Receita
+        destino = 'receitas'
+    
+    else:
+        objeto = Despesa
+        destino = 'despesas'
+
+
     if valido:
-        Receita.objects.create(
+        objeto.objects.create(
             valor = form_data['valor'],
             data = form_data['data'],
             descricao = form_data['descricao'],
@@ -61,35 +107,45 @@ def criar_receita(request):
             comprovante = form_data['comprovante']
             )
     
-    return redirect('receitas')
+    return redirect(destino)
 
 
-def alterar(request, id):
+def alterar(request, type, id):
+    if type == 'r':
+        destino = 'receitas'
+        objeto = Receita
+        template = loader.get_template('alterar_receita.html')
+
+    else:
+        destino = 'despesas'
+        objeto = Despesa
+        template = loader.get_template('alterar_despesa.html')
+        
     if request.method == 'POST':
-        form_data = ReceitaForm(request.POST)
-        receita = Receita.objects.get(pk=id)
-        receita.valor = form_data.data['valor']
-        receita.data = form_data.data['data']
-        receita.descricao = form_data.data['descricao']
-        receita.categoria = form_data.data['categoria']
-        receita.comprovante = form_data.data['comprovante']
+        form_data = request.POST
+        objeto = objeto.objects.get(pk=id)
+        objeto.valor = form_data['valor']
+        objeto.data = form_data['data']
+        objeto.descricao = form_data['descricao']
+        objeto.categoria = form_data['categoria']
+        objeto.comprovante = form_data['comprovante']
         valido = duplicidade_validation(
-            form_data.data['valor'], 
-            form_data.data['data'], 
-            form_data.data['categoria']
+            form_data['valor'], 
+            form_data['data'], 
+            form_data['categoria'],
+            type
             )
 
         if valido:
-            receita.save()
+            objeto.save()
 
-        return redirect('receitas')
-
-    receita_antigo = Receita.objects.get(pk=id).__dict__
-    receita_antigo.pop('_state')
-    receita_antigo.pop('comprovante')
-    template = loader.get_template('alterar_receita.html')
+        return redirect(destino)
+    
+    objeto_antigo = objeto.objects.get(pk=id).__dict__
+    objeto_antigo.pop('_state')
+    objeto_antigo.pop('comprovante')
     context = {
-        'form': ReceitaForm(initial=receita_antigo),
+        'form': ReceitaForm(initial=objeto_antigo),
         'id': id
     }
 
@@ -97,20 +153,36 @@ def alterar(request, id):
 
 
 def remover(request):
-    id = list(request.POST.keys())[1]
-    receita = Receita.objects.get(pk=id)
-    receita.delete()
+    args = list(request.POST.keys())[1].split(' ')
+    id = args[0]
+    type = args[1]
+    
+    if type == 'r':
+        destino = 'receitas'
+        objeto = Receita
 
-    return redirect('receitas')
+    else:
+        destino = 'despesas'
+        objeto = Despesa
+
+    objeto = objeto.objects.get(pk=id)
+    objeto.delete()
+
+    return redirect(destino)
   
 
-def exportar(request):
-    receitas = Receita.objects.all()
-    
-    gerar_arquivo(receitas)
+def exportar(request, type):
+    if type == 'r':
+        objeto = Receita
 
-    with open('receitas.csv', 'rb') as fh:
+    else:
+        objeto = Despesa
+        
+    objetos = objeto.objects.all()
+    arquivo_nome = gerar_arquivo(objetos, type)
+
+    with open(arquivo_nome, 'rb') as fh:
         response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-        response['Content-Disposition'] = 'inline; filename=' + os.path.basename('receitas.csv')
+        response['Content-Disposition'] = 'inline; filename=' + os.path.basename(arquivo_nome)
         
         return response

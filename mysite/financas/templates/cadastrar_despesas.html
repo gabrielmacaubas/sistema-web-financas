@@ -20,7 +20,7 @@
    </nav>
    <div class="container">
       <form action="{% url 'criar' type %}" method="post">
-         <h1>Cadastrar Receita</h1>
+         <h1>Cadastrar Despesa</h1>
          {% csrf_token %}
          {{ form.as_p }}
          <input type="submit" value="Cadastrar">
@@ -29,11 +29,11 @@
          <h1>Filtros</h1>
          {% csrf_token %}
          {{ filtroForm.as_p}}
-         <a href="{% url 'receitas' %}">
+         <a href="{% url 'despesas' %}">
             <input id="limpar" type="button" value="Limpar" style="background-color:gray">
          </a>
          <input type="submit" value="Filtrar">
-      </form>
+      </form>    
    </div>
    <table>
       <tr>
@@ -48,18 +48,18 @@
          </th>
       </tr>
       {% load humanize %}
-      {% for receita in receitas %}
+      {% for despesa in despesas %} 
       <tr>
-         <td style="color:green">+ R$ {{ receita.valor|floatformat:2|intcomma }}</td>
-         <td>{{ receita.data }}</td>
-         <td>{{ receita.descricao }}</td>
-         <td>{{ receita.categoria }}</td>
-         <td>{{ receita.comprovante }}</td>
+         <td style="color:red">- R$ {{ despesa.valor|floatformat:2|intcomma }}</td>
+         <td>{{ despesa.data }}</td>
+         <td>{{ despesa.descricao }}</td>
+         <td>{{ despesa.categoria }}</td>
+         <td>{{ despesa.comprovante }}</td>
          <td>
-            <a class="alterar" href="{% url 'alterar' type receita.id  %}">
+            <a class="alterar" href="{% url 'alterar' type despesa.id %}">
                <span class="material-symbols-outlined">edit</span>
             </a>
-            <a class="remover" data-receita-id="{{ receita.id }} {{ type }}" data-bs-toggle="modal" data-bs-target="#removerModal">
+            <a class="remover" data-despesa-id="{{ despesa.id }} {{ type }}" data-bs-toggle="modal" data-bs-target="#removerModal">
                <span class="material-symbols-outlined">delete</span>
             </a>
          </td>
@@ -71,16 +71,16 @@
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-header">
-               <h1 class="modal-title fs-5" id="removerModalLabel">Remover Receita</h1>
+               <h1 class="modal-title fs-5" id="removerModalLabel">Remover Despesa</h1>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-               Você deseja remover esta receita?
+               Você deseja remover esta despesa?
             </div>
             <div class="modal-footer">
                <form action="{% url 'remover' %}" method="post">
                   {% csrf_token %}
-                  <input type="hidden" id="receitaId" name="receitaId">
+                  <input type="hidden" id="despesaValor" name="despesaValor">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                   <button type="submit" class="btn btn-primary" >Confirmar</button>
                </form>          
@@ -95,7 +95,7 @@
       const meuModal = document.getElementById('removerModal');
       meuModal.addEventListener('shown.bs.modal', (e) => {
          var button = e.relatedTarget;
-         document.getElementById('receitaId').name = button.getAttribute('data-receita-id');
+         document.getElementById('despesaValor').name = button.getAttribute('data-despesa-id');
       });
    </script>
 </body>
