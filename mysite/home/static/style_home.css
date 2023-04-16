@@ -1,0 +1,41 @@
+.navbar, .card-container, a {
+    font-family: 'Montserrat';  
+}
+
+.navbar {
+    display:flex;
+    text-align: center;
+    background-color: #3776ab; 
+    color: white; 
+    padding: 16px; 
+    margin: 20px 15%;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px;  
+}
+
+.card {
+    width: 200px;
+    height: 280px;
+    margin: 20px;
+    border-radius: 0;
+    border: 1px solid lightgray;
+    text-align: justify; 
+}
+
+.btn, .btn:hover, .btn:active, .btn:visited, a {
+    background-color: #3776ab;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}

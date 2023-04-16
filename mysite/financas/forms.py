@@ -9,7 +9,8 @@ class ReceitaForm(forms.ModelForm):
         widgets = {
             'data': 
             forms.DateInput(
-                attrs={'type': 'date', 'placeholder': 'dd-mm-yyyy (DOB)', 'class': 'h5'})
+                attrs={'type': 'date', 'placeholder': 'dd-mm-yyyy (DOB)', 'class': 'h5'}),
+            'valor': forms.NumberInput(attrs={'placeholder': '0.00'})
         }
 
 

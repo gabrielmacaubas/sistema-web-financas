@@ -35,7 +35,7 @@ def receitas_view(request):
     context = {
         'form': ReceitaForm(),
         'filtroForm': filtro_form,
-        'header': ['Valor', 'Data', 'Descrição', 'Categoria', 'Comprovante', ''],
+        'header': ['Valor', 'Data', 'Descrição', 'Categoria', 'Comprovante'],
         'receitas': receitas
     }
 

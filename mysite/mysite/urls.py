@@ -9,5 +9,5 @@ urlpatterns = [
     path('criar_receita/', criar_receita, name="criar_receita"),
     path('remover/', remover, name="remover"),
     path('alterar/<int:id>', alterar, name="alterar"),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name="aadmin"),
 ]
