@@ -27,12 +27,13 @@ def receitas_view(request):
             receitas = filtrar_data(data, receitas)
         
         filtro_form = filtro_form.dict()
+
         filtro_form.pop('csrfmiddlewaretoken')
+
         filtro_form = FiltroForm(initial=filtro_form)
 
 
     template = loader.get_template('cadastrar_receitas.html')
-    
     context = {
         'form': ReceitaForm(),
         'filtroForm': filtro_form,
@@ -44,15 +45,21 @@ def receitas_view(request):
 
 
 def criar_receita(request):
-    form_data = ReceitaForm(request.POST)
-
-    Receita.objects.create(
-        valor = form_data.data['valor'],
-        data = form_data.data['data'],
-        descricao = form_data.data['descricao'],
-        categoria = form_data.data['categoria'],
-        comprovante = form_data.data['comprovante']
-    )
+    form_data = ReceitaForm(request.POST).data
+    valido = duplicidade_validation(
+        form_data['valor'], 
+        form_data['data'], 
+        form_data['categoria']
+        )
+    
+    if valido:
+        Receita.objects.create(
+            valor = form_data['valor'],
+            data = form_data['data'],
+            descricao = form_data['descricao'],
+            categoria = form_data['categoria'],
+            comprovante = form_data['comprovante']
+            )
     
     return redirect('receitas')
 
@@ -66,8 +73,14 @@ def alterar(request, id):
         receita.descricao = form_data.data['descricao']
         receita.categoria = form_data.data['categoria']
         receita.comprovante = form_data.data['comprovante']
+        valido = duplicidade_validation(
+            form_data.data['valor'], 
+            form_data.data['data'], 
+            form_data.data['categoria']
+            )
 
-        receita.save()
+        if valido:
+            receita.save()
 
         return redirect('receitas')
 
@@ -101,4 +114,3 @@ def exportar(request):
         response['Content-Disposition'] = 'inline; filename=' + os.path.basename('receitas.csv')
         
         return response
-

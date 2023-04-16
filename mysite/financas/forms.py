@@ -1,5 +1,5 @@
 from django import forms
-from .models import Receita
+from .models import Receita, Filtro
 
 
 class ReceitaForm(forms.ModelForm):
@@ -9,31 +9,19 @@ class ReceitaForm(forms.ModelForm):
         widgets = {
             'data': 
             forms.DateInput(
-                attrs={'type': 'date', 'placeholder': 'dd-mm-yyyy (DOB)', 'class': 'h5'}),
-            'valor': forms.NumberInput(attrs={'placeholder': '0.00'})
+                attrs={'type': 'date', 'placeholder': 'dd-mm-yyyy (DOB)'}),
+            'valor': forms.NumberInput(attrs={'placeholder': '0.00'}),
         }
 
 
-class FiltroForm(forms.Form):
-    min = forms.DecimalField(
-        max_digits=10,
-        decimal_places=2, 
-        help_text='R$', 
-        required=False, 
-        widget=forms.TextInput(attrs={'placeholder': '0.00'}
-    ))
-    max = forms.DecimalField(
-        max_digits=10, 
-        decimal_places=2, 
-        help_text='R$', 
-        required=False, 
-        widget=forms.TextInput(attrs={'placeholder': '0.00'}
-    ))
-    data = forms.DateField(
-        required=False,
-        widget=forms.TextInput(attrs={'type': 'date', 'placeholder': 'dd-mm-yyyy (DOB)', 'class': 'h5'})
-    )
-    categoria = forms.CharField(
-        max_length=12, 
-        required=False
-    )
+class FiltroForm(forms.ModelForm):
+    class Meta:
+        model = Filtro
+        fields = '__all__'
+        widgets = {
+            'data': forms.DateInput(
+                attrs={'type': 'date', 'placeholder': 'dd-mm-yyyy (DOB)'}
+                ),
+            'min': forms.NumberInput(attrs={'placeholder': '0.00'}),
+            'max': forms.NumberInput(attrs={'placeholder': '0.00'}),
+        }

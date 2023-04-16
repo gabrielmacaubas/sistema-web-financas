@@ -1,4 +1,5 @@
 import csv
+from .models import Receita
 
 
 def filtrar_valor(min, max, receitas):  
@@ -36,3 +37,12 @@ def gerar_arquivo(receitas):
         writer.writerow([receita.valor, receita.data, receita.descricao, receita.categoria, receita.comprovante])
     
     
+def duplicidade_validation(valor, data, categoria):
+    receitas = Receita.objects.filter(valor=valor)
+    receitas = receitas.filter(data=data)
+    receitas = receitas.filter(categoria=categoria)
+    
+    if len(receitas) == 0:
+        return True
+    else:
+        return False
