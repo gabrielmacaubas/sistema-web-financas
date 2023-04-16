@@ -1,3 +1,4 @@
+import os
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import redirect
@@ -89,3 +90,15 @@ def remover(request):
 
     return redirect('receitas')
   
+
+def exportar(request):
+    receitas = Receita.objects.all()
+    
+    gerar_arquivo(receitas)
+
+    with open('receitas.csv', 'rb') as fh:
+        response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+        response['Content-Disposition'] = 'inline; filename=' + os.path.basename('receitas.csv')
+        
+        return response
+

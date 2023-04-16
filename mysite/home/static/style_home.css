@@ -1,14 +1,16 @@
-.navbar, .card-container, a {
-    font-family: 'Montserrat';  
+.navbar, .card-container {
+    font-family: 'Montserrat';
 }
 
 .navbar {
-    display:flex;
+    display: flex;
+    align-items: center;
     text-align: center;
     background-color: #3776ab; 
     color: white; 
-    padding: 16px; 
+    padding: 10px 0;  
     margin: 20px 15%;
+    justify-content: space-between;
 }
 
 .card-container {
@@ -30,7 +32,7 @@
     background-color: #3776ab;
     border: none;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 8px;
     text-align: center;
     text-decoration: none;
     display: inline-block;

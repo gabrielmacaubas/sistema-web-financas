@@ -41,11 +41,10 @@
          <th>{{ head }}</th>
          {% endfor %}
          <th>
-            <button class="btn btn-primary">
+            <a class="btn btn-primary" href="{% url 'exportar' %}">
                <span class="material-symbols-outlined exportar">download</span>
                exportar
-
-            </button>
+            </a>
          </th>
       </tr>
       {% load humanize %}

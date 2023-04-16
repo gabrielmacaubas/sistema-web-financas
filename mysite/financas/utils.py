@@ -1,3 +1,6 @@
+import csv
+
+
 def filtrar_valor(min, max, receitas):  
     if min == '':
         min = "0.00"
@@ -19,6 +22,17 @@ def filtrar_categoria(categoria, receitas):
     receitas = receitas.filter(categoria=categoria)
     return receitas
 
+
 def filtrar_data(data, receitas):
     receitas = receitas.filter(data=data)
     return receitas
+
+
+def gerar_arquivo(receitas):
+    writer = csv.writer(open('receitas.csv', 'w'))
+    writer.writerow(['Valor', 'Data', 'Descrição', 'Categoria', 'Comprovante'])
+
+    for receita in receitas:
+        writer.writerow([receita.valor, receita.data, receita.descricao, receita.categoria, receita.comprovante])
+    
+    
