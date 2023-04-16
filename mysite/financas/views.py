@@ -53,7 +53,7 @@ def criar_receita(request):
         comprovante = form_data.data['comprovante']
     )
     
-    return redirect('/receitas')
+    return redirect('receitas')
 
 
 def alterar(request, id):
@@ -68,7 +68,7 @@ def alterar(request, id):
 
         receita.save()
 
-        return redirect('/receitas')
+        return redirect('receitas')
 
     receita_antigo = Receita.objects.get(pk=id).__dict__
     receita_antigo.pop('_state')
@@ -87,5 +87,5 @@ def remover(request):
     receita = Receita.objects.get(pk=id)
     receita.delete()
 
-    return redirect('/receitas')
+    return redirect('receitas')
   

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from receitas.views import receitas_view, alterar, criar_receita, remover
+from financas.views import receitas_view, alterar, criar_receita, remover
 from home.views import home_view
 
 urlpatterns = [
