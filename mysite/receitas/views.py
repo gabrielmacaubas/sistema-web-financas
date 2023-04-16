@@ -3,28 +3,38 @@ from django.template import loader
 from django.shortcuts import redirect
 from .models import Receita
 from .forms import ReceitaForm, FiltroForm
+from .utils import *
 
 
 def receitas_view(request):
     receitas = Receita.objects.all().order_by('data').reverse()
+    filtro_form = FiltroForm(request.GET)
 
-    """
-    else:
-        filtro_form = FiltroForm(request.GET)
-        receitas = ler_receitas()
+    if len(filtro_form.data) != 0:
+        filtro_form = filtro_form.data
+        if filtro_form['min'] != '' or filtro_form['max'] != '':
+            min = filtro_form['min']
+            max = filtro_form['max']    
+            receitas = filtrar_valor(min, max, receitas)
 
-        if len(filtro_form.data) != 0:
-            if filtro_form.data['min'] != '' or filtro_form.data['max'] != '':
-                min = filtro_form.data['min']
-                max = filtro_form.data['max']
+        if filtro_form['categoria'] != '':
+            categoria = filtro_form['categoria']
+            receitas = filtrar_categoria(categoria, receitas)
+        
+        if filtro_form['data'] != '':
+            data = filtro_form['data']
+            receitas = filtrar_data(data, receitas)
+        
+        filtro_form = filtro_form.dict()
+        filtro_form.pop('csrfmiddlewaretoken')
+        filtro_form = FiltroForm(initial=filtro_form)
 
-                receitas = filtrar_valor(min, max, receitas)
-    """
 
     template = loader.get_template('cadastrar_receitas.html')
+    
     context = {
         'form': ReceitaForm(),
-        'filtroForm': FiltroForm(),
+        'filtroForm': filtro_form,
         'header': ['Valor', 'Data', 'Descrição', 'Categoria', 'Comprovante', ''],
         'receitas': receitas
     }
@@ -77,27 +87,7 @@ def remover(request):
     receita.delete()
 
     return redirect('/receitas')
-"""
-def filtrar_valor(min, max, receitas):  
-    if min == '':
-        min = 0
+
+
+
     
-    receitas_novo = []
-    min = int(min)
-
-    if max == '':
-        for receita in receitas:
-            if int(receita["valor"]) >= min:
-                receitas_novo.append(receita)
-
-        return receitas_novo
-
-    else:
-        max = int(max)
-
-        for receita in receitas:
-            if int(receita["valor"]) >= min and int(receita["valor"]) <= max:
-                receitas_novo.append(receita)
-
-        return receitas_novo
-"""        

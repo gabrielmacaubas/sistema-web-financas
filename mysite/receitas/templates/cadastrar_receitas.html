@@ -7,7 +7,7 @@
    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
    {% load static %}
-   <link rel="stylesheet" href="{% static '/stylee.css' %}">
+   <link rel="stylesheet" href="{% static '/styleee.css' %}">
 </head>
 <body>
    <header>
@@ -28,7 +28,9 @@
          {% csrf_token %}
          {{ filtroForm.as_p}}
          <input type="submit" value="Filtrar">
-         <input type="submit" value="Remover Filtro">
+         <a href="{% url 'receitas' %}">
+            <input id="limpar" type="button" value="Remover Filtro" style="background-color:gray">
+         </a>
       </form>
    </div>
    <table>
