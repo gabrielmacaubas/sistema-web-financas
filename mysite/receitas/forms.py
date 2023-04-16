@@ -36,7 +36,3 @@ class FiltroForm(forms.Form):
         max_length=12, 
         required=False
     )
-
-
-
-

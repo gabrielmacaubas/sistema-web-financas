@@ -72,6 +72,7 @@ def alterar(request, id):
 
     receita_antigo = Receita.objects.get(pk=id).__dict__
     receita_antigo.pop('_state')
+    receita_antigo.pop('comprovante')
     template = loader.get_template('alterar_receita.html')
     context = {
         'form': ReceitaForm(initial=receita_antigo),
@@ -87,7 +88,4 @@ def remover(request):
     receita.delete()
 
     return redirect('/receitas')
-
-
-
-    
+  
