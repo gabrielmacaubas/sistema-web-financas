@@ -1,13 +1,9 @@
-import shutil
-from tempfile import NamedTemporaryFile
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import redirect
 from .models import Receita
 from .forms import ReceitaForm, FiltroForm
-import csv
-import datetime
-import pandas as pd
+
 
 def receitas_view(request):
     receitas = Receita.objects.all().order_by('data').reverse()
@@ -40,18 +36,17 @@ def criar_receita(request):
     form_data = ReceitaForm(request.POST)
 
     Receita.objects.create(
-        valor= form_data.data['valor'],
-        data= form_data.data['data'],
-        descricao= form_data.data['descricao'],
-        categoria= form_data.data['categoria'],
-        comprovante= form_data.data['comprovante']
+        valor = form_data.data['valor'],
+        data = form_data.data['data'],
+        descricao = form_data.data['descricao'],
+        categoria = form_data.data['categoria'],
+        comprovante = form_data.data['comprovante']
     )
     
     return redirect('/receitas')
 
 
 def alterar(request, id):
-    
     if request.method == 'POST':
         form_data = ReceitaForm(request.POST)
         receita = Receita.objects.get(pk=id)

@@ -49,20 +49,16 @@ th {
     font-weight: bold;
 }
 
-.container {
-    display: flex;
-    justify-content: space-between;
-    max-width: 100%;
-    width: 100%;
-
-}
-
-.alterar, .remover {
-    color: #3776ab;
-    font-size: 15px;
+input[type="file"] {
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 5px 0;
     cursor: pointer;
+    border-radius: 4px;
 }
-
+  
 input[type="submit"], .btn-primary{
     background-color: #3776ab;
     border: none;
@@ -75,6 +71,20 @@ input[type="submit"], .btn-primary{
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 4px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    width: 100%;
+
+}
+
+.alterar, .remover {
+    color: #3776ab;
+    font-size: 15px;
+    cursor: pointer;
 }
 
 .btn-primary:hover {
@@ -93,14 +103,3 @@ input[type="submit"], .btn-primary{
     cursor: pointer;
     border-radius: 4px;
 }
-
-input[type="file"] {
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 5px 0;
-    cursor: pointer;
-    border-radius: 4px;
-}
-  

@@ -2,7 +2,6 @@ from django import forms
 from .models import Receita
 
 
-
 class ReceitaForm(forms.ModelForm):
     class Meta:
         model = Receita
@@ -29,14 +28,3 @@ class FiltroForm(forms.Form):
         required=False, 
         widget=forms.TextInput(attrs={'placeholder': '0,00'}
     ))
-    #data
-    #categoria
-
-"""
-class FormularioReceitas(forms.Form):
-    valor = forms.DecimalField(max_digits=10, decimal_places=2)
-    data = forms.CharField(max_length=10)
-    descricao = forms.CharField(max_length=100)
-    categoria = forms.CharField(max_length=12)
-    comprovante_opcional = forms.FileField(required=False)
-"""

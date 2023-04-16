@@ -10,15 +10,6 @@ header {
     margin: 20px 15%;
 }
 
-
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* change to flex-start to move buttons up */
-    height: 100vh;
-    margin-top: 50px;
-}
-
 button {
     background-color: #8dc6ff;
     border: none;
@@ -32,4 +23,12 @@ button {
     cursor: pointer;
     border-radius: 4px;
     font-size: 35px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* change to flex-start to move buttons up */
+    height: 100vh;
+    margin-top: 50px;
 }
