@@ -32,7 +32,7 @@ def filtrar_data(data, objetos):
 
 
 def gerar_arquivo(objetos, type):
-    if type == 'r':
+    if type == 'receita':
         arquivo_nome = 'receitas.csv'
     
     else:
@@ -48,8 +48,7 @@ def gerar_arquivo(objetos, type):
 
 
 def duplicidade_validation(valor, data, categoria, type):
-    if type == 'r':
-        
+    if type == 'receita':
         dados = Receita.objects.filter(valor=valor)
 
     else:

@@ -37,7 +37,7 @@ def receitas_view(request):
         'filtroForm': filtro_form,
         'header': ['Valor', 'Data', 'Descrição', 'Categoria', 'Comprovante'],
         'receitas': receitas,
-        'type': 'r'
+        'type': 'receita'
     }
 
     return HttpResponse(template.render(context, request))
@@ -74,32 +74,23 @@ def despesas_view(request):
         'filtroForm': filtro_form,
         'header': ['Valor', 'Data', 'Descrição', 'Categoria', 'Comprovante'],
         'despesas': despesas,
-        'type': 'd'
+        'type': 'despesa'
     }
 
     return HttpResponse(template.render(context, request))
 
 
-def criar(request, type):
+def criar_receita(request):
     form_data = request.POST
     valido = duplicidade_validation(
         form_data['valor'], 
         form_data['data'],
         form_data['categoria'],
-        type
+        'receita'
         )
-    
-    if type == 'r':
-        objeto = Receita
-        destino = 'receitas'
-    
-    else:
-        objeto = Despesa
-        destino = 'despesas'
-
 
     if valido:
-        objeto.objects.create(
+        Receita.objects.create(
             valor = form_data['valor'],
             data = form_data['data'],
             descricao = form_data['descricao'],
@@ -107,45 +98,91 @@ def criar(request, type):
             comprovante = form_data['comprovante']
             )
     
-    return redirect(destino)
+    return redirect('receitas')
 
 
-def alterar(request, type, id):
-    if type == 'r':
-        destino = 'receitas'
-        objeto = Receita
-        template = loader.get_template('alterar_receita.html')
+def criar_despesa(request):
+    form_data = request.POST
+    valido = duplicidade_validation(
+        form_data['valor'], 
+        form_data['data'],
+        form_data['categoria'],
+        'despesa'
+        )
 
-    else:
-        destino = 'despesas'
-        objeto = Despesa
-        template = loader.get_template('alterar_despesa.html')
+    if valido:
+        Despesa.objects.create(
+            valor = form_data['valor'],
+            data = form_data['data'],
+            descricao = form_data['descricao'],
+            categoria = form_data['categoria'],
+            comprovante = form_data['comprovante']
+            )
+    
+    return redirect('despesas')
         
+
+def alterar_receita(request, id):      
     if request.method == 'POST':
         form_data = request.POST
-        objeto = objeto.objects.get(pk=id)
-        objeto.valor = form_data['valor']
-        objeto.data = form_data['data']
-        objeto.descricao = form_data['descricao']
-        objeto.categoria = form_data['categoria']
-        objeto.comprovante = form_data['comprovante']
+        receita = Receita.objects.get(pk=id)
+        print(receita)
+        receita.valor = form_data['valor']
+        receita.data = form_data['data']
+        receita.descricao = form_data['descricao']
+        receita.categoria = form_data['categoria']
+        receita.comprovante = form_data['comprovante']
         valido = duplicidade_validation(
             form_data['valor'], 
             form_data['data'], 
             form_data['categoria'],
-            type
+            'receita'
             )
 
         if valido:
-            objeto.save()
+            receita.save()
 
-        return redirect(destino)
+        return redirect('receitas')
     
-    objeto_antigo = objeto.objects.get(pk=id).__dict__
-    objeto_antigo.pop('_state')
-    objeto_antigo.pop('comprovante')
+    receita_antigo = Receita.objects.get(pk=id).__dict__
+    receita_antigo.pop('_state')
+    receita_antigo.pop('comprovante')
+    template = loader.get_template('alterar_receita.html')
     context = {
-        'form': ReceitaForm(initial=objeto_antigo),
+        'form': ReceitaForm(initial=receita_antigo),
+        'id': id
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
+def alterar_despesa(request, id):      
+    if request.method == 'POST':
+        form_data = request.POST
+        despesa = Despesa.objects.get(pk=id)
+        despesa.valor = form_data['valor']
+        despesa.data = form_data['data']
+        despesa.descricao = form_data['descricao']
+        despesa.categoria = form_data['categoria']
+        despesa.comprovante = form_data['comprovante']
+        valido = duplicidade_validation(
+            form_data['valor'], 
+            form_data['data'], 
+            form_data['categoria'],
+            'despesa'
+            )
+
+        if valido:
+            despesa.save()
+
+        return redirect('despesas')
+    
+    despesa_antigo = Despesa.objects.get(pk=id).__dict__
+    despesa_antigo.pop('_state')
+    despesa_antigo.pop('comprovante')
+    template = loader.get_template('alterar_despesa.html')
+    context = {
+        'form': DespesaForm(initial=despesa_antigo),
         'id': id
     }
 
@@ -157,7 +194,7 @@ def remover(request):
     id = args[0]
     type = args[1]
     
-    if type == 'r':
+    if type == 'receita':
         destino = 'receitas'
         objeto = Receita
 
@@ -171,15 +208,21 @@ def remover(request):
     return redirect(destino)
   
 
-def exportar(request, type):
-    if type == 'r':
-        objeto = Receita
+def exportar_receita(request):  
+    receitas = Receita.objects.all()
+    arquivo_nome = gerar_arquivo(receitas, 'receita')
 
-    else:
-        objeto = Despesa
+    with open(arquivo_nome, 'rb') as fh:
+        response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+        response['Content-Disposition'] = 'inline; filename=' + os.path.basename(arquivo_nome)
         
-    objetos = objeto.objects.all()
-    arquivo_nome = gerar_arquivo(objetos, type)
+        return response
+
+
+def exportar_despesa(request):
+
+    despesas = Despesa.objects.all()
+    arquivo_nome = gerar_arquivo(despesas, 'despesa')
 
     with open(arquivo_nome, 'rb') as fh:
         response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")

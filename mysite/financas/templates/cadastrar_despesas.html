@@ -19,7 +19,7 @@
       </div>
    </nav>
    <div class="container">
-      <form action="{% url 'criar' type %}" method="post">
+      <form action="{% url 'criar_despesa' %}" method="post">
          <h1>Cadastrar Despesa</h1>
          {% csrf_token %}
          {{ form.as_p }}
@@ -41,7 +41,7 @@
          <th>{{ head }}</th>
          {% endfor %}
          <th>
-            <a class="btn btn-primary" href="{% url 'exportar' type %}">
+            <a class="btn btn-primary" href="{% url 'exportar_despesa' %}">
                <span class="material-symbols-outlined exportar">download</span>
                exportar
             </a>
@@ -56,10 +56,10 @@
          <td>{{ despesa.categoria }}</td>
          <td>{{ despesa.comprovante }}</td>
          <td>
-            <a class="alterar" href="{% url 'alterar' type despesa.id %}">
+            <a class="alterar" href="{% url 'alterar_despesa' despesa.id %}">
                <span class="material-symbols-outlined">edit</span>
             </a>
-            <a class="remover" data-despesa-id="{{ despesa.id }} {{ type }}" data-bs-toggle="modal" data-bs-target="#removerModal">
+            <a class="remover" data-despesa-id="{{ despesa.id }} despesa" data-bs-toggle="modal" data-bs-target="#removerModal">
                <span class="material-symbols-outlined">delete</span>
             </a>
          </td>

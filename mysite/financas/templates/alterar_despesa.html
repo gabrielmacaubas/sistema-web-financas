@@ -17,7 +17,7 @@
       </div>
    </nav>
    <div class="container">
-      <form action="{% url 'alterar' 'd' id %}" method="post">
+      <form action="{% url 'alterar_despesa' id %}" method="post">
          <h1>Alterar Despesa</h1>
          {% csrf_token %}
          {{ form.as_p }}

@@ -19,7 +19,7 @@
       </div>
    </nav>
    <div class="container">
-      <form action="{% url 'criar' type %}" method="post">
+      <form action="{% url 'criar_receita' %}" method="post">
          <h1>Cadastrar Receita</h1>
          {% csrf_token %}
          {{ form.as_p }}
@@ -41,7 +41,7 @@
          <th>{{ head }}</th>
          {% endfor %}
          <th>
-            <a class="btn btn-primary" href="{% url 'exportar' type %}">
+            <a class="btn btn-primary" href="{% url 'exportar_receita' %}">
                <span class="material-symbols-outlined exportar">download</span>
                exportar
             </a>
@@ -56,10 +56,10 @@
          <td>{{ receita.categoria }}</td>
          <td>{{ receita.comprovante }}</td>
          <td>
-            <a class="alterar" href="{% url 'alterar' type receita.id  %}">
+            <a class="alterar" href="{% url 'alterar_receita' receita.id  %}">
                <span class="material-symbols-outlined">edit</span>
             </a>
-            <a class="remover" data-receita-id="{{ receita.id }} {{ type }}" data-bs-toggle="modal" data-bs-target="#removerModal">
+            <a class="remover" data-receita-id="{{ receita.id }} receita" data-bs-toggle="modal" data-bs-target="#removerModal">
                <span class="material-symbols-outlined">delete</span>
             </a>
          </td>
