@@ -2,6 +2,7 @@ import os
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import redirect
+from django.contrib import messages
 from .models import Receita
 from .forms import *
 from .utils import *
@@ -66,8 +67,13 @@ def despesas_view(request):
 def criar_receita_view(request):
     try:
         form_data = request.POST
+        resposta = criar(form_data, Receita)
 
-        criar(form_data, Receita)
+        if resposta:
+            messages.success(request, 'Receita criada com sucesso!')
+        
+        else:
+            messages.error(request, 'Já existe uma receita com esses atributos!')
 
         return redirect('receitas')
     except Exception as e:
@@ -77,8 +83,12 @@ def criar_receita_view(request):
 def criar_despesa_view(request):
     try:
         form_data = request.POST
-        
-        criar(form_data, Despesa)
+        resposta = criar(form_data, Despesa)
+
+        if resposta:
+            messages.success(request, 'Despesa criada com sucesso!')
+        else:
+            messages.error(request, 'Já existe uma despesa com esses atributos!')
         
         return redirect('despesas')
     except Exception as e:

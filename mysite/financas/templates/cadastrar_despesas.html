@@ -51,6 +51,17 @@
          <input type="submit" value="Filtrar">
       </form>    
    </div>
+   {% for message in messages %}
+   {% if message.tags == 'success' %}
+   <div class="container" style="margin-left:0; width: 800px; color:olivedrab">
+      {{ message }}
+   </div>
+   {% else %}
+   <div class="container" style="margin-left:0; width: 800px; color:tomato">
+      {{ message }}
+   </div>
+   {% endif %}
+   {% endfor %}
    <!-- Tabela de despesas -->
    <table>
       <!-- Cabeçalho da tabela -->

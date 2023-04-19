@@ -21,6 +21,10 @@ def criar(form, type):
             categoria = form['categoria'],
             comprovante = form['comprovante']
             )
+        
+        return True
+    else:
+        return False
 
 # função auxiliar para alteração de objetos no banco de dados
 def alterar(object, form, type):
