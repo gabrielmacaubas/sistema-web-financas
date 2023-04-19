@@ -11,6 +11,12 @@ from .utils import *
 def receitas_view(request):
     # envia os dados para o template com ou sem filtos
     try:
+        if not request.user.is_authenticated:
+            template = loader.get_template('acesso_restrito.html')
+            context = {}
+
+            return HttpResponse(template.render(context, request))
+        
         receitas = Receita.objects.all().order_by('data').reverse()
         filtro_form = request.GET.dict()
         (filtro_form, receitas) = filtrar(receitas, filtro_form, Receita)
@@ -31,6 +37,12 @@ def receitas_view(request):
 def despesas_view(request):
     # envia os dados para o template com ou sem filtos
     try:
+        if not request.user.is_authenticated:
+            template = loader.get_template('acesso_restrito.html')
+            context = {}
+            
+            return HttpResponse(template.render(context, request))
+        
         despesas = Despesa.objects.all().order_by('data').reverse()
         filtro_form = request.GET.dict()
         (filtro_form, despesas) = filtrar(despesas, filtro_form, Despesa)
@@ -73,6 +85,12 @@ def criar_despesa_view(request):
 # view para alteração de uma receita
 def alterar_receita_view(request, id): 
     try:
+        if not request.user.is_authenticated:
+            template = loader.get_template('acesso_restrito.html')
+            context = {}
+            
+            return HttpResponse(template.render(context, request))
+        
         # em caso de POST, altera o objeto e redireciona para a página de receitas
         if request.method == 'POST':
             form_data = request.POST
@@ -97,6 +115,12 @@ def alterar_receita_view(request, id):
 # view para alteração de uma receita
 def alterar_despesa_view(request, id):
     try:
+        if not request.user.is_authenticated:
+            template = loader.get_template('acesso_restrito.html')
+            context = {}
+            
+            return HttpResponse(template.render(context, request))
+        
         # em caso de POST, altera o objeto e redireciona para a página de receitas
         if request.method == 'POST':
             form_data = request.POST

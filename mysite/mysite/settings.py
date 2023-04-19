@@ -17,7 +17,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'financas',
-    'home'
+    'home',
+    'authentication',
 ]
 
 MIDDLEWARE = [
