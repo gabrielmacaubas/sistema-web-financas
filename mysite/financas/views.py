@@ -10,27 +10,7 @@ from .utils import *
 def receitas_view(request):
     receitas = Receita.objects.all().order_by('data').reverse()
     filtro_form = request.GET.dict()
-
-    if len(filtro_form) != 0:
-        if filtro_form['min'] != '' or filtro_form['max'] != '':
-            min = filtro_form['min']
-            max = filtro_form['max']    
-            receitas = filtrar_valor(min, max, receitas)
-
-        if filtro_form['categoria'] != '':
-            categoria = filtro_form['categoria']
-            receitas = filtrar_categoria(categoria, receitas)
-        
-        if filtro_form['data'] != '':
-            data = filtro_form['data']
-            receitas = filtrar_data(data, receitas)
-        
-        filtro_form.pop('csrfmiddlewaretoken')
-        filtro_form = FiltroReceitaForm(initial=filtro_form)
-
-    else:
-        filtro_form = FiltroReceitaForm()
-
+    (filtro_form, receitas) = filtrar(receitas, filtro_form, Receita)
     template = loader.get_template('cadastrar_receitas.html')
     context = {
         'form': ReceitaForm(),
@@ -46,27 +26,7 @@ def receitas_view(request):
 def despesas_view(request):
     despesas = Despesa.objects.all().order_by('data').reverse()
     filtro_form = request.GET.dict()
-
-    if len(filtro_form) != 0:
-        if filtro_form['min'] != '' or filtro_form['max'] != '':
-            min = filtro_form['min']
-            max = filtro_form['max']    
-            despesas = filtrar_valor(min, max, despesas)
-
-        if filtro_form['categoria'] != '':
-            categoria = filtro_form['categoria']
-            despesas = filtrar_categoria(categoria, despesas)
-        
-        if filtro_form['data'] != '':
-            data = filtro_form['data']
-            despesas = filtrar_data(data, despesas)
-        
-        filtro_form.pop('csrfmiddlewaretoken')
-        filtro_form = FiltroDespesaForm(initial=filtro_form)
-
-    else:
-        filtro_form = FiltroDespesaForm()
-
+    (filtro_form, despesas) = filtrar(despesas, filtro_form, Despesa)
     filtro_form = FiltroDespesaForm()
     template = loader.get_template('cadastrar_despesas.html')
     context = {
@@ -80,70 +40,30 @@ def despesas_view(request):
     return HttpResponse(template.render(context, request))
 
 
-def criar_receita(request):
+def criar_receita_view(request):
     form_data = request.POST
-    valido = duplicidade_validation(
-        form_data['valor'], 
-        form_data['data'],
-        form_data['categoria'],
-        'receita'
-        )
 
-    if valido:
-        Receita.objects.create(
-            valor = form_data['valor'],
-            data = form_data['data'],
-            descricao = form_data['descricao'],
-            categoria = form_data['categoria'],
-            comprovante = form_data['comprovante']
-            )
-    
+    criar(form_data, Receita)
+
     return redirect('receitas')
 
 
-def criar_despesa(request):
+def criar_despesa_view(request):
     form_data = request.POST
-    valido = duplicidade_validation(
-        form_data['valor'], 
-        form_data['data'],
-        form_data['categoria'],
-        'despesa'
-        )
-
-    if valido:
-        Despesa.objects.create(
-            valor = form_data['valor'],
-            data = form_data['data'],
-            descricao = form_data['descricao'],
-            categoria = form_data['categoria'],
-            comprovante = form_data['comprovante']
-            )
+    
+    criar(form_data, Despesa)
     
     return redirect('despesas')
         
 
-def alterar_receita(request, id):      
+def alterar_receita_view(request, id): 
     if request.method == 'POST':
         form_data = request.POST
         receita = Receita.objects.get(pk=id)
-        print(receita)
-        receita.valor = form_data['valor']
-        receita.data = form_data['data']
-        receita.descricao = form_data['descricao']
-        receita.categoria = form_data['categoria']
-        receita.comprovante = form_data['comprovante']
-        valido = duplicidade_validation(
-            form_data['valor'], 
-            form_data['data'], 
-            form_data['categoria'],
-            'receita'
-            )
-
-        if valido:
-            receita.save()
-
-        return redirect('receitas')
-    
+        alterar(receita, form_data, Receita)
+        
+        return redirect('receitas')    
+     
     receita_antigo = Receita.objects.get(pk=id).__dict__
     receita_antigo.pop('_state')
     receita_antigo.pop('comprovante')
@@ -156,26 +76,13 @@ def alterar_receita(request, id):
     return HttpResponse(template.render(context, request))
 
 
-def alterar_despesa(request, id):      
+def alterar_despesa_view(request, id):      
     if request.method == 'POST':
         form_data = request.POST
         despesa = Despesa.objects.get(pk=id)
-        despesa.valor = form_data['valor']
-        despesa.data = form_data['data']
-        despesa.descricao = form_data['descricao']
-        despesa.categoria = form_data['categoria']
-        despesa.comprovante = form_data['comprovante']
-        valido = duplicidade_validation(
-            form_data['valor'], 
-            form_data['data'], 
-            form_data['categoria'],
-            'despesa'
-            )
-
-        if valido:
-            despesa.save()
-
-        return redirect('despesas')
+        alterar(despesa, form_data, Despesa)
+        
+        return redirect('despesas')     
     
     despesa_antigo = Despesa.objects.get(pk=id).__dict__
     despesa_antigo.pop('_state')
@@ -189,7 +96,7 @@ def alterar_despesa(request, id):
     return HttpResponse(template.render(context, request))
 
 
-def remover(request):
+def remover_view(request):
     args = list(request.POST.keys())[1].split(' ')
     id = args[0]
     type = args[1]
@@ -208,7 +115,7 @@ def remover(request):
     return redirect(destino)
   
 
-def exportar_receita(request):  
+def exportar_receita_view(request):  
     receitas = Receita.objects.all()
     arquivo_nome = gerar_arquivo(receitas, 'receita')
 
@@ -219,7 +126,7 @@ def exportar_receita(request):
         return response
 
 
-def exportar_despesa(request):
+def exportar_despesa_view(request):
 
     despesas = Despesa.objects.all()
     arquivo_nome = gerar_arquivo(despesas, 'despesa')
