@@ -1,16 +1,8 @@
+/* estilização básica para as páginas de cadastro
+   e alteração de finanças  */
+
 body{
     font-family: 'Montserrat';
-}
-
-.navbar {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    background-color: #3776ab; 
-    color: white; 
-    padding: 18.5px 0;  
-    margin: 20px 15%;
-    justify-content: space-between;
 }
 
 a {
@@ -40,7 +32,6 @@ th {
     color: black;
     font-weight: bold;
 }
-
 
 form {
     display: inline-block;
@@ -103,3 +94,13 @@ input[type="submit"], .btn-primary, #voltar, #limpar{
     border-radius: 4px;
 }
 
+.navbar {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background-color: #3776ab; 
+    color: white; 
+    padding: 18.5px 0;  
+    margin: 20px 15%;
+    justify-content: space-between;
+}

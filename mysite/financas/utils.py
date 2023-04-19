@@ -2,7 +2,44 @@ import csv
 from .forms import FiltroDespesaForm, FiltroReceitaForm
 from .models import Receita, Despesa
 
+# arquivo para funções auxiliares
 
+# função auxiliar para criação de objetos no banco de dados
+def criar(form, type):
+    valido = duplicidade_validation(
+        form['valor'], 
+        form['data'],
+        form['categoria'],
+        type
+        )
+
+    if valido:
+        type.objects.create(
+            valor = form['valor'],
+            data = form['data'],
+            descricao = form['descricao'],
+            categoria = form['categoria'],
+            comprovante = form['comprovante']
+            )
+
+# função auxiliar para alteração de objetos no banco de dados
+def alterar(object, form, type):
+    object.valor = form['valor']
+    object.data = form['data']
+    object.descricao = form['descricao']
+    object.categoria = form['categoria']
+    object.comprovante = form['comprovante']
+    valido = duplicidade_validation(
+        form['valor'], 
+        form['data'], 
+        form['categoria'],
+        type
+        )
+
+    if valido:
+        object.save()
+
+# função auxiliar de filtragem, chama outras funções de filtragem
 def filtrar(objetos, form, type):
     if type == Receita:
         form_type = FiltroReceitaForm
@@ -33,42 +70,7 @@ def filtrar(objetos, form, type):
     
     return (form, objetos)
 
-
-def criar(form, type):
-    valido = duplicidade_validation(
-        form['valor'], 
-        form['data'],
-        form['categoria'],
-        type
-        )
-
-    if valido:
-        type.objects.create(
-            valor = form['valor'],
-            data = form['data'],
-            descricao = form['descricao'],
-            categoria = form['categoria'],
-            comprovante = form['comprovante']
-            )
-
-
-def alterar(object, form, type):
-    object.valor = form['valor']
-    object.data = form['data']
-    object.descricao = form['descricao']
-    object.categoria = form['categoria']
-    object.comprovante = form['comprovante']
-    valido = duplicidade_validation(
-        form['valor'], 
-        form['data'], 
-        form['categoria'],
-        type
-        )
-
-    if valido:
-        object.save()
-
-
+# função auxiliar para filtragem de valores
 def filtrar_valor(min, max, objetos): 
     
     if min == '':
@@ -86,18 +88,18 @@ def filtrar_valor(min, max, objetos):
 
     return objetos
 
-
+# função auxiliar para filtragem de categorias
 def filtrar_categoria(categoria, objetos):
     objetos = objetos.filter(categoria=categoria)
 
     return objetos
 
-
+# função auxiliar para filtragem de datas
 def filtrar_data(data, objetos):
     objetos = objetos.filter(data=data)
     return objetos
 
-
+# função auxiliar para geração de arquivos csv
 def gerar_arquivo(objetos, type):
     if type == 'receita':
         arquivo_nome = 'receitas.csv'
@@ -113,7 +115,7 @@ def gerar_arquivo(objetos, type):
     
     return arquivo_nome
 
-
+# função auxiliar de validação de duplicidade
 def duplicidade_validation(valor, data, categoria, type):
     if type == Receita:
         dados = type.objects.filter(valor=valor)

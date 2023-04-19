@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+# paths para o CRUD
+
 urlpatterns = [
     path('receitas/', views.receitas_view, name='receitas'),
     path('despesas/', views.despesas_view, name='despesas'),

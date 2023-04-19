@@ -1,5 +1,7 @@
 from django.db import models
 
+# choices para cada categoria de receita e despesa
+
 RECEITA_CHOICES = (
     ('Investimento', 'Investimento'),
     ('Presente', 'Presente'),
@@ -18,6 +20,7 @@ DESPESA_CHOICES = (
     ('Outros', 'Outros')    
 )
 
+# classe essencial da Receita
 
 class Receita(models.Model):
     valor = models.DecimalField(
@@ -39,6 +42,7 @@ class Receita(models.Model):
         blank=False
         )
     
+# classe essencial da Despesa
 
 class Despesa(models.Model):
     valor = models.DecimalField(
@@ -60,6 +64,7 @@ class Despesa(models.Model):
         blank=False
         )
     
+# classe para filtros de receita
 
 class FiltroReceita(models.Model):
     min = models.DecimalField(
@@ -87,6 +92,7 @@ class FiltroReceita(models.Model):
         null=True
         )
 
+# classe para filtros de despesa
 
 class FiltroDespesa(models.Model):
     min = models.DecimalField(

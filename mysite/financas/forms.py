@@ -1,11 +1,13 @@
 from django import forms
 from .models import *
 
+# constrói as classes de formulário para cada modelo
 
 class ReceitaForm(forms.ModelForm):
     class Meta:
         model = Receita
         fields = "__all__"
+        # adiciona funcionalidade de calendário e placeholder ao formulário
         widgets = {
             'data': 
             forms.DateInput(
@@ -25,11 +27,13 @@ class DespesaForm(forms.ModelForm):
             'valor': forms.NumberInput(attrs={'placeholder': '0.00'}),
         }
 
+# constrói as classes de formulário para cada modelo de filtro
 
 class FiltroReceitaForm(forms.ModelForm):
     class Meta:
         model = FiltroReceita
         fields = '__all__'
+        # adiciona funcionalidade de calendário e placeholder ao formulário
         widgets = {
             'data': forms.DateInput(
                 attrs={'type': 'date', 'placeholder': 'dd-mm-yyyy (DOB)'}

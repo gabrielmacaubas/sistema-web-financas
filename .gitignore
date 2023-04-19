@@ -1,3 +1,4 @@
 
 *.pyc
 cliente1
+__pycache__

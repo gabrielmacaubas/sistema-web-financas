@@ -3,6 +3,7 @@ from django.urls import path
 from financas.views import *
 from home.views import home_view
 
+# paths para o CRUD
 urlpatterns = [
     path('', home_view, name="home"),
     path('receitas/', receitas_view, name="receitas"),
