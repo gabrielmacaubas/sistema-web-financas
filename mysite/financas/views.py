@@ -11,6 +11,7 @@ from .utils import *
 def receitas_view(request):
     # envia os dados para o template com ou sem filtos
     try:
+        # verifica se o usuario está logado
         if not request.user.is_authenticated:
             template = loader.get_template('acesso_restrito.html')
             context = {}
@@ -37,6 +38,7 @@ def receitas_view(request):
 def despesas_view(request):
     # envia os dados para o template com ou sem filtos
     try:
+        # verifica se o usuario está logado
         if not request.user.is_authenticated:
             template = loader.get_template('acesso_restrito.html')
             context = {}
@@ -85,6 +87,7 @@ def criar_despesa_view(request):
 # view para alteração de uma receita
 def alterar_receita_view(request, id): 
     try:
+        # verifica se o usuario está logado
         if not request.user.is_authenticated:
             template = loader.get_template('acesso_restrito.html')
             context = {}
@@ -115,6 +118,7 @@ def alterar_receita_view(request, id):
 # view para alteração de uma receita
 def alterar_despesa_view(request, id):
     try:
+        # verifica se o usuario está logado
         if not request.user.is_authenticated:
             template = loader.get_template('acesso_restrito.html')
             context = {}

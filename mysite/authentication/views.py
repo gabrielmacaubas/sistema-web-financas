@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import *
 
-
+# realiza view para página de login
 def entrar(request):
     if request.method == 'POST':
         form = request.POST
@@ -34,7 +34,7 @@ def entrar(request):
 
     return HttpResponse(template.render(context, request))
 
-
+# realiza view da pagina de registro
 def registrar(request):
     
         if request.method == 'POST':
@@ -42,7 +42,7 @@ def registrar(request):
             nome = form['username']
             email = form['email']
             senha = form['password']
-            
+
             try:
                 usuario = User.objects.create_user(nome, email, senha)
             except Exception:
@@ -62,7 +62,7 @@ def registrar(request):
 
         return HttpResponse(template.render(context, request))
 
-
+# realiza logout
 def sair(request):
     logout(request)
     messages.success(request, 'Usuário deslogado com sucesso!')
