@@ -7,7 +7,7 @@ auto-py-to-exe==2.32.0
 backports.zoneinfo==0.2.1
 bottle==0.12.25
 bottle-websocket==0.2.9
-certifi==2019.11.28
+certifi==2022.12.7
 chardet==3.0.4
 charset-normalizer==3.0.1
 click==8.1.3
