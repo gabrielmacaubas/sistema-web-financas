@@ -37,7 +37,7 @@ PyAutoGUI==0.9.53
 pydub==0.25.1
 PyGetWindow==0.0.9
 PyGObject==3.36.0
-pyinstaller==5.8.0
+pyinstaller==5.13.1
 pyinstaller-hooks-contrib==2023.0
 PyMsgBox==1.0.9
 pyparsing==3.0.9
